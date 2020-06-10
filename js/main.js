@@ -19,14 +19,51 @@ function gameloop(canvas){
   let cars = new Array();
   const carCount = 20;
 
+  let lights = new Array();
+
+  const yOffset = 100;
+  const laneNum = 5;
+
+  const dispositionStates = [
+    "timid",
+    "normal",
+    "aggressive"
+  ]
+
   //make some cars...
   for(let i=0;i<carCount;i++){
-    cars.push(buildCar(randInt(0, 800), i*50, randInt(4, 10), randInt(120, 255), randInt(120, 255), randInt(120, 255)));
+    cars.push(
+      buildCar(
+        randInt(20, 40), // width
+        randInt(10, 12), // height
+        randInt(0, 800), // starting x
+        ((i % laneNum )*15) + yOffset, // starting y
+        randInt(4, 10), // speed
+        dispositionStates[Math.floor(Math.random() * dispositionStates.length)], //disposition
+        'accellerate', //state
+        randInt(120, 255), // R
+        randInt(120, 255), // G
+        randInt(120, 255)  // B
+      )
+    );
   }
 
-  function update(){
+  //make some lights...
+  for(let i=0;i<laneNum;i++){
+    lights.push(
+      buildLight(
+        8,
+        8,
+        randInt(600, 1000),
+        (i*15) + yOffset,
+        "green"
+      )
+    )
+  }
 
-      render(canvas, cars)
+  //kick off the actual loop...
+  function update(){
+      render(canvas, cars, lights)
       requestAnimationFrame(update);
   }
   //kick off the game loop...
@@ -34,29 +71,66 @@ function gameloop(canvas){
 
 }
 
-function render(canvas, cars){
+function render(canvas, cars, lights){
   let ctx = canvas.getContext('2d');
 
   //clear...
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  //hanlde lights...
+  for (let i=0;i<lights.length;i++){
+    //render the car...
+    ctx.fillStyle = lights[i].color;
+    ctx.fillRect(lights[i].x, lights[i].y, lights[i].w, lights[i].h,);
+  }
 
+  //handle cars...
   for(let i=0;i<cars.length;i++){
 
-    //move our cars...
+    //move our cars from left to right...
     cars[i].x += cars[i].speed;
-    if(cars[i].x > parseInt(canvas.width)){
+
+    //test wrapping...
+    if(cars[i].x > parseInt(canvas.width || cars[i].x < 0)){
       cars[i].x = 0;
     }
 
     //render the car...
     ctx.fillStyle = cars[i].color;
-    ctx.fillRect(cars[i].x, cars[i].y, 60, 30);
+    ctx.fillRect(cars[i].x, cars[i].y, cars[i].w, cars[i].h,);
 
   }
 
-  //play some music?
+
+}
+
+//trash model here...
+function buildCar(w, h, x, y, speed, disposition, state, r, g, b){
+  return{
+    w: w,
+    h: h,
+    x: x,
+    y: y,
+    speed: speed,
+    disposition: disposition, // one of: 'timid', 'normal', 'aggressive'
+    state: state, // one of: 'drive', 'accellerate', 'brake'
+    color: `rgb(${r}, ${g}, ${b})`
+  }
+}
+
+function buildLight(w, h, x, y, color){
+  return{
+    w: w,
+    h: h,
+    x: x,
+    y: y,
+    color: color // one of "red", "yellow", "green"
+  }
+}
+
+//music stuff?
+//play some music?
   //if(this.tick === undefined){
   //  this.tick = 0;
   //}
@@ -72,22 +146,6 @@ function render(canvas, cars){
     }
   }
   */
-
-
-}
-
-//trash model here...
-function buildCar(x, y, speed, r, g, b){
-  return{
-    x: x,
-    y: y,
-    speed: speed,
-    color: `rgb(${r}, ${g}, ${b})`
-  }
-}
-
-//music stuff?
-
 //type is one of:
 //
 //  sine
@@ -116,6 +174,8 @@ function playNote(frequency, type, sustain) {
   g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + sustain);
 }
 
+// end of music stuff; may run in a separate loop for better control...
+// might even use a whole other lib if I want to do proper pads / synths etc...
 
 
 function randInt(min, max){
