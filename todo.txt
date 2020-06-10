@@ -6,3 +6,16 @@ Some items to cover:
 -implement traffic lights w/logic
 -implement driver disposition (timid / normal / aggresive)
 -implement driver motive; ie destination based driving and pathfinding
+
+-add music perhaps?
+
+
+references:
+
+-draw an animation along a line (curved or straight)
+https://stackoverflow.com/questions/17083580/i-want-to-do-animation-of-an-object-along-a-particular-path
+
+-pan and scale
+https://www.sitepoint.com/community/t/help-needed-for-canvas-zoom-etc/255766/7
+https://codepen.io/techslides/pen/zowLd
+https://stackoverflow.com/questions/3420975/html5-canvas-zooming
