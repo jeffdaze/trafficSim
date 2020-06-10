@@ -1,0 +1,8 @@
+Some items to cover:
+
+-draw streets
+-follow lines / curves
+-zoom in and out of the overall map
+-implement traffic lights w/logic
+-implement driver disposition (timid / normal / aggresive)
+-implement driver motive; ie destination based driving and pathfinding
