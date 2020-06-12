@@ -119,7 +119,19 @@ function render(canvas, cars, lights){
     //broadphase
     if(broadphase(cars[i].x, cars[i].y)){
       if(lights[0].color == 'yellow'){
-        accel = 0.6;
+        //handle different driver dispositions for yellow lights...
+        if(cars[i].disposition == "normal"){
+          accel = 0.1;
+        }
+
+        if(cars[i].disposition == "timid"){
+          accel = 0.01;
+        }
+
+        if(cars[i].disposition == "aggressive"){
+          accel = 1.1;
+        }
+
       }
       if(lights[0].color == 'red'){
         accel = 0.001;
