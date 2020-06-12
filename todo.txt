@@ -9,6 +9,9 @@ Some items to cover:
 
 -add music perhaps?
 
+-add some rudimentary sensors?
+-investigate flocking behaviour for lanes?
+
 
 references:
 

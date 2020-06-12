@@ -13,6 +13,10 @@ function sizeCanvas(canvas){
   canvas.height = window.innerHeight;
 }
 
+//game globals... need maybe can find a better way to do this...
+let lightTick = 0;
+
+
 function gameloop(canvas){
 
   //init some game stuff here...
@@ -20,7 +24,6 @@ function gameloop(canvas){
   const carCount = 20;
 
   let lights = new Array();
-
   const yOffset = 100;
   const laneNum = 5;
 
@@ -54,7 +57,7 @@ function gameloop(canvas){
       buildLight(
         8,
         8,
-        randInt(600, 1000),
+        700,
         (i*15) + yOffset,
         "green"
       )
@@ -63,7 +66,7 @@ function gameloop(canvas){
 
   //kick off the actual loop...
   function update(){
-      render(canvas, cars, lights)
+      render(canvas, cars, lights, lightTick)
       requestAnimationFrame(update);
   }
   //kick off the game loop...
@@ -78,8 +81,25 @@ function render(canvas, cars, lights){
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  //hanlde lights...
+  lightTick++;
+
+  //handle lights...
   for (let i=0;i<lights.length;i++){
+
+    if(lightTick > 2500){
+      lightTick = 0;
+    }
+    if(lightTick <= 1500){
+      lights[i].color = 'green';
+    }
+    if(lightTick > 1500 && lightTick <= 1700){
+      lights[i].color = 'yellow';
+    }
+    if(lightTick >= 1700){
+      lights[i].color = 'red'
+    }
+
+
     //render the car...
     ctx.fillStyle = lights[i].color;
     ctx.fillRect(lights[i].x, lights[i].y, lights[i].w, lights[i].h,);
@@ -89,7 +109,24 @@ function render(canvas, cars, lights){
   for(let i=0;i<cars.length;i++){
 
     //move our cars from left to right...
-    cars[i].x += cars[i].speed;
+    // need to add stopping factor here; maybe isolate this separately...
+
+    //regular speed;
+    // higher than 1 is accellerating
+    // lower than 1 is decellerating (braking)
+    let accel = 1;
+    //detect light state...
+    //broadphase
+    if(broadphase(cars[i].x, cars[i].y)){
+      if(lights[0].color == 'yellow'){
+        accel = 0.6;
+      }
+      if(lights[0].color == 'red'){
+        accel = 0.001;
+      }
+    }
+
+    cars[i].x += cars[i].speed * accel;
 
     //test wrapping...
     if(cars[i].x > parseInt(canvas.width || cars[i].x < 0)){
@@ -103,6 +140,18 @@ function render(canvas, cars, lights){
   }
 
 
+}
+
+//broadphase car location detection...
+// returns bool
+function broadphase(carX, carY){
+  //compare this car x/y to the approximate location of sets of lights...
+  //this is super specific to this initial state; might need something to set up all the
+  //possible broadphase 'cells' when lights are created
+  if(carX > 600 && carX < 710){
+    return true;
+  }
+  return false;
 }
 
 //trash model here...
