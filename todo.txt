@@ -12,8 +12,12 @@ Some items to cover:
 -add some rudimentary sensors?
 -investigate flocking behaviour for lanes?
 
+-use radius to determine 'flocking' behaviour
+
 
 references:
+-inspiration
+http://roberthodgin.com/project/traffic
 
 -draw an animation along a line (curved or straight)
 https://stackoverflow.com/questions/17083580/i-want-to-do-animation-of-an-object-along-a-particular-path
@@ -22,3 +26,13 @@ https://stackoverflow.com/questions/17083580/i-want-to-do-animation-of-an-object
 https://www.sitepoint.com/community/t/help-needed-for-canvas-zoom-etc/255766/7
 https://codepen.io/techslides/pen/zowLd
 https://stackoverflow.com/questions/3420975/html5-canvas-zooming
+
+
+Need to make a small vector lib -- neat discovery!
+Math.hypot:
+
+//calculate length of a vector [5, 12]
+console.log(Math.hypot(5, 12));
+console.log(Math.sqrt(5*5 + 12*12));
+
+both return 13

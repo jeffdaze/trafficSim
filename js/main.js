@@ -100,7 +100,11 @@ function render(canvas, cars, lights){
     }
 
 
-    //render the car...
+    //render the lights...
+    ctx.shadowBlur = 10;
+    //ctx.shadowColor = lights[i].color;
+    ctx.shadowColor = "white";
+
     ctx.fillStyle = lights[i].color;
     ctx.fillRect(lights[i].x, lights[i].y, lights[i].w, lights[i].h,);
   }
@@ -146,6 +150,8 @@ function render(canvas, cars, lights){
     }
 
     //render the car...
+    ctx.shadowBlur = 0;
+    //ctx.shadowColor = car[i].color;
     ctx.fillStyle = cars[i].color;
     ctx.fillRect(cars[i].x, cars[i].y, cars[i].w, cars[i].h,);
 
